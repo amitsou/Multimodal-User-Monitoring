@@ -12,7 +12,7 @@ def convert_txt_to_csv(path,newpath,fname):
     filename = fname+".csv"
     newpath=path
     names = ["Date","Time","Action","PosX","PosY","Button"]
-    df.to_csv(newpath,header=names)
+    df.to_csv(newpath,header=names,index=False)
     return 
 
 
