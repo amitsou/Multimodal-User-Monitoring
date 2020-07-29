@@ -12,11 +12,9 @@ button = None
 
 def on_move(x,y):
     if click_held:
-        #print("MV    {0:>8}  {1:>8}  {2:5s}:".format(x,y,str(None))) 
         print("MV    {:5d}  {:5d}  {:5s}:".format(x,y,str(None))) 
         logging.info("MV    {0:>8}  {1:>8}  {2:>8}:".format(x,y,str(None)))
-    else:
-        #print("MV    {0:>8}  {1:>8}  {2:>8}:".format(x,y,str(None))) 
+    else: 
         print("MV    {:5d}  {:5d}  {:5s}:".format(x,y,str(None))) 
         logging.info("MV    {0:>8}  {1:>8}  {2:>8}:".format(x,y,str(None)))
     
@@ -25,21 +23,17 @@ def on_click(x,y,button,pressed):
     if pressed:
         click_held = True
         print("CLK    {:4d}  {:5d}  {:5s}:".format(x,y,button))
-        #print("CLK    {0:>7}    {1:>6}    {2:>13}".format(x,y,button))
         logging.info("CLK    {0:>7}    {1:>6}    {2:>13}".format(x,y,button))
     else:
         click_held = False
         print("RLS    {:4d}  {:5d}  {:5s}:".format(x,y,button)) 
-        #print("RLS    {0:>7}    {1:>6}    {2:>13}".format(x,y,button))
         logging.info("RLS    {0:>7}    {1:>6}    {2:>13}".format(x,y,button))
 
 def on_scroll(x,y,dx,dy):
     if dy == -1:
-        #print("SCRD    {0:>6}    {1:>6}    {2:>6}".format(x,y,str(None)))
         print("SCRD   {:3d}  {:5d}  {:5s}:".format(x,y,str(None))) 
         logging.info("SCRD    {0:>6}    {1:>6}    {2:>6}".format(x,y,str(None)))
     elif dy == 1:
-        #print("SCRU    {0:>6}    {1:>6}    {2:>6}".format(x,y,str(None)))
         print("SCRU   {:3d}  {:5d}  {:5s}:".format(x,y,str(None))) 
         logging.info("SCRU    {0:>6}    {1:>6}    {2:>6}".format(x,y,str(None)))
     else:

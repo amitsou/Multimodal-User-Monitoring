@@ -1,6 +1,5 @@
 #include<TimeLib.h>
 
-
 /*Force Sensor Resistance to Arduino's Analog Ports*/
 int fsrAnalogPin1 = 0; //FSR1 is connected to analog 0
 int fsrAnalogPin2 = 1; //FSR2 is connected to analog 1
@@ -71,7 +70,6 @@ void loop(void) {
    analogWrite(LEDpin4, LEDbrightness);
    LEDbrightness = map(fsrReading5, 0, 1023, 0, 255);
    analogWrite(LEDpin5, LEDbrightness);
-
-   //digitalClockDisplay();
+ 
    delay(1000);
 }

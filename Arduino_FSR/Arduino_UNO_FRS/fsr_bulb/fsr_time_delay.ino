@@ -1,5 +1,6 @@
 #include<TimeLib.h>
 
+/*Send sensor data to serial port every K minutes*/
 
 /*Force Sensor Resistance to Arduino's Analog Ports*/
 int fsrAnalogPin1 = 0; //FSR1 is connected to analog 0
