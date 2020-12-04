@@ -24,7 +24,6 @@ if __name__ == '__main__':
     
     if len(txt_names) == len(csv_names):
         for i in range(len(txt_names)):
-            print(txt_names[i],csv_names[i])
             cf.convert_txt_2_csv(txt_names[i],csv_names[i])
             shutil.move(txt_names[i],edited_recs)
     else:
