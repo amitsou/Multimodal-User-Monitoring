@@ -23,7 +23,8 @@ def get_readings(output_file):
     ser = serial.Serial(serial_port,baud_rate)
     logging.basicConfig(filename=output_file,level=logging.DEBUG,format="%(asctime)s    %(message)s")
     flag = False
-    while True:
+    start = time.time()
+    while time.time() - start < 60.0:
         try:
             serial_data = str(ser.readline().decode().strip('\r\n')) 
             time.sleep(0.2)
