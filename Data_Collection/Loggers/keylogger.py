@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import log_functions as lf
+from threading import Timer
 from pynput import keyboard
 import logging
 import time
@@ -14,4 +15,5 @@ if __name__=='__main__':
     logging.basicConfig(filename=fname,level=logging.DEBUG,format="%(asctime)s    %(message)s")
     
     with keyboard.Listener(on_press = lf.on_press_keys) as listener:
+        Timer(5, listener.stop).start()
         listener.join()

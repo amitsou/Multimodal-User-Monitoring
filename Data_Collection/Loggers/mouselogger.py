@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import log_functions as lf
+from threading import Timer
 from pynput.mouse import Listener
-import logging 
+import logging
+import time  
 import os
 
 if __name__=='__main__':
@@ -12,4 +14,5 @@ if __name__=='__main__':
     logging.basicConfig(filename=fname,level=logging.DEBUG,format="%(asctime)s    %(message)s")
     
     with Listener(on_move=lf.on_move, on_click=lf.on_click,on_scroll=lf.on_scroll) as listener:
+        Timer(60, listener.stop).start()
         listener.join()
