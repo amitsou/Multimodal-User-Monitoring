@@ -1,6 +1,9 @@
-<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"  alt="centered image" />
+<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"  align="left" height="130" />
+
 # General Info
+
 This repository contains the thesis code entitled:
+
 **'Workplace recording in order to record fatigue from work sources'**
 
 <div align="justify">
