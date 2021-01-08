@@ -1,10 +1,4 @@
-<table>
-  <tr>
-    <td valign="top"><img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"></td>
-    <td valign="top"><img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/uop%20logo.png" ></td>
-  </tr>
- </table>
- 
+<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd.png"  alt="centered image" width="200" height="400"/>
 # General Info
 This repository contains the thesis code entitled:
 **'Workplace recording in order to record fatigue from work sources'**
