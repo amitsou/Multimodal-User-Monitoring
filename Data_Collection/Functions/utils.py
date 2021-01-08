@@ -176,10 +176,10 @@ def create_subdirs(paths):
         paths (list): A list containing the paths to be created
     """
     for index,path in enumerate(paths):
-        if(os.path.isdir(paths[index])):
+        if(os.path.isdir(path)):
             pass
         else:
-            os.mkdir(paths[index])
+            os.mkdir(path)
 
 
 def round_down(num,divisor) -> int:
@@ -215,6 +215,8 @@ def get_name(modality) -> str:
         str: The absolute path where each recording is saved
     """
     current_path = os.path.abspath(os.getcwd())
+    os.chdir('..')
+    current_path = (os.path.abspath(os.curdir))
     current_path = os.path.join(current_path,'Data')
 
     if modality == 'Chair':
@@ -228,6 +230,14 @@ def get_name(modality) -> str:
     elif modality == 'Keyboard':
         keyboard_path = os.path.join(current_path,modality,'Raw')
         return keyboard_path
+
+
+def time_in_range(start, end, x):
+    """Return true if x is in the range [start, end]"""
+    if start <= end:
+        return start <= x <= end
+    else:
+        return start <= x or x <= end
 
 
 def crawl_dir(target,folder) -> str:
