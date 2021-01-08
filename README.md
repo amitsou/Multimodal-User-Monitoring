@@ -1,4 +1,4 @@
-<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"  alt="centered image" width="800" height="400"/>
+<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"  alt="centered image" />
 # General Info
 This repository contains the thesis code entitled:
 **'Workplace recording in order to record fatigue from work sources'**
@@ -13,4 +13,4 @@ This dissertation takes place within the interdepartmental program of postgradua
   
 Techniques from the fields of machine learning, vision computer, audio analysis and text analysis will then be used, in order to identify how much fatigue, stress and anxiety an employee is experiencing.
 
-<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png"  alt="centered image"  width="800" height="400"/>
+<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png"  alt="centered image"/>
