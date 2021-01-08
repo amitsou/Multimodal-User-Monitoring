@@ -19,4 +19,4 @@ This dissertation takes place within the interdepartmental program of postgradua
   
 Techniques from the fields of machine learning, vision computer, audio analysis and text analysis will then be used, in order to identify how much fatigue, stress and anxiety an employee is experiencing.
 </div>
-![plot](/images/chair.png) 
+![](https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png) 
