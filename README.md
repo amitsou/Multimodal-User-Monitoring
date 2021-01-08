@@ -1,11 +1,7 @@
 <table>
   <tr>
-    <td>First Screen Page</td>
-     <td>Holiday Mention</td>
-  </tr>
-  <tr>
-    <td valign="top"><img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%logo.png"></td>
-    <td valign="top"><img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/uop%logo.png" ></td>
+    <td valign="top"><img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"></td>
+    <td valign="top"><img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/uop%20logo.png" ></td>
   </tr>
  </table>
  
