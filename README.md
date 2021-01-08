@@ -1,4 +1,4 @@
-<img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"  align="center" height="130" /> <br/>
+<p style="text-align:center;"><img src= "https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg"  height="130" /></p></br>
 
 # General Info
 
