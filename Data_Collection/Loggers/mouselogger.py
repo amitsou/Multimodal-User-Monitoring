@@ -11,7 +11,6 @@ from Functions import utils as ut
 
 if __name__=='__main__':
 
-    ut.initialize_dirs()
     rec_file = ''.join((ut.get_date(),'.txt'))
     raw_data = ut.get_name('Mouse')
     rec_file = os.path.join(raw_data,rec_file)
