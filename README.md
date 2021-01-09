@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" >
+    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" width="100" height="80">
   </a>
   
   <h3 align="center">Multimodal User Monitoring</h3>
