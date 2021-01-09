@@ -52,7 +52,7 @@ In order to execute the code in this repository you'll need the following instal
 * pynput for python3: [https://pypi.org/project/pynput/](https://pypi.org/project/pynput/)
 
 <!-- CONTACT -->
-## 📱 Contact [🔝](#welcome-badges-4-readmemd-profile)
+## 📱 Contact
 
 Badge | Link
 ------------ | -------------
