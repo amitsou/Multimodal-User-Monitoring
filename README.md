@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" width="100" height="200">
+    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" >
   </a>
   
   <h3 align="center">Multimodal User Monitoring</h3>
@@ -73,7 +73,7 @@ In order to execute the code in this repository you'll need the following instal
    <br />
    <p align="center">
        <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/camera.png" alt="Logo" width="100" height="200">
+            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/camera.png" alt="Logo" >
        </a>
    </p>
 
