@@ -21,12 +21,10 @@ def get_data():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Collect arguments')
-    #parser.add_argument("--start", metavar='start(text)', help="Please provide start time in hh:mm:ss format")
     parser.add_argument("--stop", metavar='stop(text)', help="Please provide end time in hh:mm:ss format")
     parser.add_argument("--m", metavar='m(text)', help="Please provide the minutes in order to execute each job")
     args = parser.parse_args()
 
-    #start_time = args.start
     start_time = str(datetime.datetime.now().time()).split('.')[0]
     end_time = args.stop
     minutes = args.m
