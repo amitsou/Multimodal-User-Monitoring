@@ -40,7 +40,7 @@ This dissertation takes place within the interdepartmental program of postgradua
 
  <!-- Chair Sensors -->
    <br />
-   <p align="left">
+   <p align="center">
        <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
             <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png" alt="Logo" width="160" height="160">
        </a>
@@ -78,7 +78,7 @@ In order to execute the code in this repository you'll need the following instal
    ```
    <!-- Terminal Output -->
    <br />
-   <p align="center">
+   <p align="left">
        <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
             <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/camera.png" alt="Logo" >
        </a>
