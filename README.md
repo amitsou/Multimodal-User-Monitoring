@@ -40,9 +40,9 @@ This dissertation takes place within the interdepartmental program of postgradua
 
  <!-- Chair Sensors -->
    <br />
-   <p align="center">
+   <p align="left">
        <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png" alt="Logo" width="150" height="150">
+            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png" alt="Logo" width="160" height="160">
        </a>
    </p>
 
