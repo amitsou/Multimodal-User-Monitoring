@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' usage: python3 scheduler.py --stop 12:00:00 --m 2 '''
 import datetime
 import schedule
 import argparse
