@@ -1,51 +1,13 @@
-<!-- NCDRD Logo -->
-<br />
-<p align="center">
-  <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" width="150" height="150">
-  </a>
-  
-  <h3 align="center">Multimodal User Monitoring</h3>
-  <br />
-</p>
-
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-      </ul>
-    </li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
 This repository contains the thesis code entitled: <b>'Workplace recording in order to record fatigue from work sources'</b>
 
-This dissertation takes place within the interdepartmental program of postgraduate studies in 'Data Science' which is co-organized by the Department of Informatics and Telecommunications of the University of the Peloponnese and the Institute of Informatics and Telecommunications of the National Center for Scientific Research Demokritos (NCSRD). The purpose of this work is to create a pipeline in order to collect data from sensors which include: </br>
+This dissertation takes place within the interdepartmental program of postgraduate studies in ['Data Science'](http://msc-data-science.iit.demokritos.gr/) which is co-organized by the Department of Informatics and Telecommunications of the University of the Peloponnese and the Institute of Informatics and Telecommunications of the National Center for Scientific Research Demokritos ([NCSRD](https://www.iit.demokritos.gr/)). The purpose of this work is to create a pipeline in order to collect data from sensors which include: </br>
 
 * Resistance-power sensors mounted on a chair 
 * A common web camera with a mounted microphone
 * Peripherals such as the keyborad and the mouse
-
- <!-- Chair Sensors -->
-   <br />
-   <p align="center">
-       <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png" alt="Logo" width="160" height="160">
-       </a>
-   </p>
-
 
 After the data collection process we create the Feature Vectors in order to create a Machine Learning Pipeline. Techniques from the fields of machine learning, vision computer, audio analysis and text analysis will then be used, in order to identify how much fatigue, stress and anxiety an employee is experiencing.
 
