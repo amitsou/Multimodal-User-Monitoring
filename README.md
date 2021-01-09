@@ -1,8 +1,8 @@
 <!-- NCDRD Logo -->
 <br />
 <p align="center">
-  <a href="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
+    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" width="80" height="80">
   </a>
   
   <h3 align="center">Multimodal User Monitoring</h3>
@@ -72,8 +72,8 @@ In order to execute the code in this repository you'll need the following instal
    <!-- NCDRD Logo -->
    <br />
    <p align="center">
-       <a href="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/camera.png">
-            <img src="images/logo.png" alt="Logo" width="80" height="80">
+       <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
+            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/camera.png" alt="Logo" width="80" height="80">
        </a>
    </p>
 
