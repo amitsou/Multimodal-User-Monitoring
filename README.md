@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" width="100" height="80">
+    <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/logo2.jpeg" alt="Logo" width="100" height="100">
   </a>
   
   <h3 align="center">Multimodal User Monitoring</h3>
@@ -29,8 +29,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]]("https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/ncsrd%20logo.jpg")
 
 This repository contains the thesis code entitled: <b>'Workplace recording in order to record fatigue from work sources'</b>
 
