@@ -38,6 +38,15 @@ This dissertation takes place within the interdepartmental program of postgradua
 * A common web camera with a mounted microphone
 * Peripherals such as the keyborad and the mouse
 
+ <!-- Chair Sensors -->
+   <br />
+   <p align="center">
+       <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
+            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/chair.png" alt="Logo" width="150" height="150">
+       </a>
+   </p>
+
+
 After the data collection process we create the Feature Vectors in order to create a Machine Learning Pipeline. Techniques from the fields of machine learning, vision computer, audio analysis and text analysis will then be used, in order to identify how much fatigue, stress and anxiety an employee is experiencing.
 
 
@@ -67,7 +76,7 @@ In order to execute the code in this repository you'll need the following instal
    ```
    v4l2-ctl --list-devices   
    ```
-   <!-- NCDRD Logo -->
+   <!-- Terminal Output -->
    <br />
    <p align="center">
        <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
