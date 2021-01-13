@@ -14,7 +14,6 @@ import os
 import sys
 
 
-
 def get_recordings():
     """Get the recorded .csv files
 
@@ -297,15 +296,15 @@ def get_chair_features(filename,segment_size):
 
 
 def mixed_plot(f1,s1,f2,s2,f3,s3):
-    """[summary]
+    """Mixed feature plot
 
     Args:
-        f1 ([type]): [description]
-        s1 ([type]): [description]
-        f2 ([type]): [description]
-        s2 ([type]): [description]
-        f3 ([type]): [description]
-        s3 ([type]): [description]
+        f1 (list): feature vector
+        s1 (list): datetime seconds
+        f2 (list): feature vector
+        s2 (list): datetime seconds
+        f3 (list): feature vector
+        s3 (list): datetime seconds
     """
     #Chair features
     df = pd.DataFrame(f1, columns = ['M_A0','STD_A0','M_A1','STD_A1','M_A2','STD_A2','M_A3','STD_A3','M_A4','STD_A4'])
@@ -362,15 +361,15 @@ def mixed_plot(f1,s1,f2,s2,f3,s3):
 
 
 def plot_all(f1,s1,f2,s2,f3,s3):
-    """[summary]
+    """Plot all the features
 
     Args:
-        f1 ([type]): [description]
-        s1 ([type]): [description]
-        f2 ([type]): [description]
-        s2 ([type]): [description]
-        f3 ([type]): [description]
-        s3 ([type]): [description]
+        f1 (list): feature vector
+        s1 (list): datetime seconds
+        f2 (list): feature vector
+        s2 (list): datetime seconds
+        f3 (list): feature vector
+        s3 (list): datetime seconds
     """
 
     #Chair features
@@ -512,11 +511,11 @@ def plot_all(f1,s1,f2,s2,f3,s3):
 
 
 def plot_mouse_features(feature,second):
-    """[summary]
+    """Plot mouse features
 
     Args:
-        feature ([type]): [description]
-        second ([type]): [description]
+        feature (list): Modality's features
+        second (datetime obj): Datetime seconds
     """
 
     df = pd.DataFrame(feature, columns = ['Velocity_X','Velocity_Y','Clicks','R_Clicks','L_Clicks','M_Clicks'])
@@ -551,11 +550,11 @@ def plot_mouse_features(feature,second):
 
 
 def plot_key_features(feature,second):
-    """[summary]
+    """Plot keyboard features
 
     Args:
-        feature ([type]): [description]
-        second ([type]): [description]
+        feature (list): Modality's features
+        second (datetime obj): Datetime seconds
     """
 
     df = pd.DataFrame(feature, columns = ['All_keys_N','Arrow_keys_N','Spaces_N','Shft_Ctrl_Alt_N'])
@@ -582,11 +581,11 @@ def plot_key_features(feature,second):
 
 
 def plot_chair_features(feature,second):
-    """[summary]
+    """Plot chair features
 
     Args:
-        feature ([type]): [description]
-        second ([type]): [description]
+        feature (list): Modality's features
+        second (datetime obj): Datetime seconds
     """
 
     df = pd.DataFrame(feature, columns = ['M_A0','STD_A0','M_A1','STD_A1','M_A2','STD_A2','M_A3','STD_A3','M_A4','STD_A4'])
