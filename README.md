@@ -41,13 +41,6 @@ In order to execute the code in this repository you'll need the following instal
    ```
    v4l2-ctl --list-devices   
    ```
-   <!-- Terminal Output -->
-   <br />
-   <p align="left">
-       <a href="https://github.com/amitsou/Multimodal-User-Monitoring">
-            <img src="https://github.com/amitsou/Multimodal-User-Monitoring/blob/master/images/camera.png" alt="Logo" >
-       </a>
-   </p>
 
 * pynput for python3: [https://pypi.org/project/pynput/](https://pypi.org/project/pynput/)
 
