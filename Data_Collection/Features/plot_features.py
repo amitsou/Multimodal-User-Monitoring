@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+""" usage: python3 plot_features.py --segment size 10 """
 from plotly.subplots import make_subplots
 import plotly.graph_objs as go
 import plotly as py
