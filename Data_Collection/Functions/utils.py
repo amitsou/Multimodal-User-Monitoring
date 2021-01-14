@@ -385,20 +385,17 @@ def parse_raw_data(modality):
     if modality == 'Mouse':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_mouse2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Keyboard':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_keys2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Chair':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_chair_2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
