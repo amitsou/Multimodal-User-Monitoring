@@ -63,7 +63,6 @@ void loop(void) {
    Serial.println(fsrReading5);
    //Serial.println("");
 
-
    LEDbrightness1 = map(fsrReading1, 0, 1023, 0, 255);
    analogWrite(LEDpin1, LEDbrightness1);
    LEDbrightness2 = map(fsrReading2, 0, 1023, 0, 255);
