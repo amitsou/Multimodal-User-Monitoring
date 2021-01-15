@@ -46,41 +46,32 @@ void loop(void) {
    Serial.print("A0  ");
    Serial.println(fsrReading1);
    //Serial.println("");
-
    fsrReading2 = analogRead(fsrAnalogPin2);
    Serial.print("A1  ");
    Serial.println(fsrReading2);
    //Serial.println("");
-
    fsrReading3 = analogRead(fsrAnalogPin3);
    Serial.print("A2  ");
    Serial.println(fsrReading3);
    //Serial.println("");
-
    fsrReading4 = analogRead(fsrAnalogPin4);
    Serial.print("A3  ");
    Serial.println(fsrReading4);
    //Serial.println("");
-
    fsrReading5 = analogRead(fsrAnalogPin5);
    Serial.print("A4  ");
    Serial.println(fsrReading5);
    //Serial.println("");
 
-   /* We'll need to change the range from the analog reading (0-1023) down to the range used by analogWrite (0-255) with map! */
-   /* LED gets brighter or harder depending on how it is pressed by the user */
+
    LEDbrightness1 = map(fsrReading1, 0, 1023, 0, 255);
    analogWrite(LEDpin1, LEDbrightness1);
-
    LEDbrightness2 = map(fsrReading2, 0, 1023, 0, 255);
    analogWrite(LEDpin2, LEDbrightness2);
-
    LEDbrightness3 = map(fsrReading3, 0, 1023, 0, 255);
    analogWrite(LEDpin3, LEDbrightness3);
-
    LEDbrightness4 = map(fsrReading4, 0, 1023, 0, 255);
    analogWrite(LEDpin4, LEDbrightness4);
-
    LEDbrightness5 = map(fsrReading5, 0, 1023, 0, 255);
    analogWrite(LEDpin5, LEDbrightness5);
 
