@@ -20,11 +20,9 @@ def stop_scheduler():
 
 def get_data():
     print('{} Executing scripts...'.format(datetime.datetime.now()))
-    #subprocess.Popen(["/home/alex/Desktop/Test_Data/Loggers/scripts.sh"], stdin=subprocess.PIPE)
     subprocess.Popen(["scripts.sh"], stdin=subprocess.PIPE)
 
 if __name__ == '__main__':
-
     logging.getLogger('schedule').propagate = False #disable schedule stdout
 
     parser = argparse.ArgumentParser(description='Collect arguments')
