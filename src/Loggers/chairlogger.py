@@ -8,7 +8,7 @@ from Functions import utils as ut
 
 if __name__ == '__main__':
     rec_file = ''.join((ut.get_date(),'.txt'))
-    raw_data = ut.get_name('Chair')
+    raw_data = ut.get_name('Chair','Raw')
     rec_file = os.path.join(raw_data,rec_file)
     ut.record_chair(rec_file)
     print('Exiting logger...')
