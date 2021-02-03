@@ -12,7 +12,7 @@ from Functions import utils as ut
 
 if __name__=='__main__':
     rec_file = ''.join((ut.get_date(),'.txt'))
-    raw_data = ut.get_name('Keyboard')
+    raw_data = ut.get_name('Keyboard','Raw')
     rec_file = os.path.join(raw_data,rec_file)
     logging.basicConfig(filename=rec_file,level=logging.DEBUG,format="%(asctime)s    %(message)s")
 
