@@ -126,31 +126,28 @@ def initialize_dirs():
     current_path = os.path.join(current_path,'Data')
     create_subdirs([current_path])
 
-    #Create mouse log folder
     mouse = os.path.join(current_path,'Mouse')
     create_subdirs([mouse])
     #Create mouse subfolders
     names = concat_names(mouse)
     create_subdirs(names)
 
-    #Create keyboard log  folder
     keyboard = os.path.join(current_path,'Keyboard')
     create_subdirs([keyboard])
     #Create keyboard subfolders
     names = concat_names(keyboard)
     create_subdirs(names)
 
-    #Create the chair log folder
     chair = os.path.join(current_path,'Chair')
     create_subdirs([chair])
     #Create chair subfolders
     names = concat_names(chair)
     create_subdirs(names)
 
-    #Create webcam log folder
     webcam = os.path.join(current_path,'Webcam')
     create_subdirs([webcam])
 
+    
 def concat_names(dir) -> str:
     """Concatenate the given folder names
        with the appropriate path
@@ -249,7 +246,7 @@ def crawl_dir(target,folder) -> str:
         folder (str): The folder to search
 
     Returns:
-        [type]: A list containing the file names
+        [list]: A list containing the file names
     """
     current_path = os.path.abspath(os.getcwd())
     path = os.path.join(current_path,folder)
@@ -364,12 +361,12 @@ def parse_raw_data(modality):
         modality (str): The data source
     """
     #Change directories
-    current_path = os.path.abspath(os.getcwd()) #/Functions
+    current_path = os.path.abspath(os.getcwd()) #Current dir
     os.chdir('..')
-    current_path = (os.path.abspath(os.curdir)) #/Multimodal_User_Monitoring
+    current_path = (os.path.abspath(os.curdir)) #Parent dir
     os.chdir('./Data')#/Multimodal_User_Monitoring/Data
-    current_path = (os.path.abspath(os.curdir)) #/Multimodal_User_Monitoring/Data
-    current_path = os.path.join(current_path,modality) #example: /Multimodal_User_Monitoring/Data/<Modality>
+    current_path = (os.path.abspath(os.curdir))
+    current_path = os.path.join(current_path,modality)
     raw_data_path = os.path.join(current_path,'Raw')
     csv_data_path = os.path.join(current_path,'CSV')
     edited_logs_path = os.path.join(current_path,'Edited_logs')
@@ -385,20 +382,17 @@ def parse_raw_data(modality):
     if modality == 'Mouse':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_mouse2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Keyboard':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_keys2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Chair':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_chair_2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
