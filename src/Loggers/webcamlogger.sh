@@ -1,6 +1,6 @@
 #!/bin/bash
 
-parent_dir=`dirname \`pwd\`` #Test_Data
+parent_dir=`dirname \`pwd\`` #Parent folder
 folder_name="/Data/Webcam" #The folder where audio and video is going to be saved
 new_path=$parent_dir$folder_name
 
