@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from Functions import utils as ut
 from plotly.subplots import make_subplots
 from statistics import mean, stdev
 from datetime import timedelta
+from functools import reduce
 import plotly.graph_objs as go
 import plotly as py
 import datetime
@@ -24,19 +26,19 @@ def get_recordings():
     os.chdir('..')
     current_path = (os.path.abspath(os.curdir))
 
-    mouse = os.path.join(current_path,'Data','Mouse','CSV')
+    mouse = os.path.join(current_path,'Data_Samples','Test_Action_1','Mouse','CSV')
     mouse_files = []
     for f in os.listdir(mouse):
         tmp = '/'.join((mouse,f))
         mouse_files.append(tmp)
 
-    keyboard = os.path.join(current_path,'Data','Keyboard','CSV')
+    keyboard = os.path.join(current_path,'Data_Samples','Test_Action_1','Keyboard','CSV')
     keyboard_files = []
     for f in os.listdir(keyboard):
         tmp = '/'.join((keyboard,f))
         keyboard_files.append(tmp)
 
-    chair = os.path.join(current_path,'Data','Chair','CSV')
+    chair = os.path.join(current_path,'Data_Samples','Test_Action_1','Chair','CSV')
     chair_files = []
     for f in os.listdir(chair):
         tmp = '/'.join((chair,f))
@@ -85,7 +87,6 @@ def get_seconds(timestamp,index):
         tmp1 = tmp1[-1].split(':') #get the last time of the previous day
 
         if len(tmp1) == 3:
-            #get the last time of the previous day in seconds
             tmp1 = float(tmp1[0]) * 3600 + float(tmp1[1]) * 60 + float(tmp1[2].replace(',', '.'))
         else:
             print('Problem Reading Data')
@@ -295,307 +296,69 @@ def get_chair_features(filename,segment_size):
     return features, segment_centers, day_start
 
 
-def plot_all(f1,s1,f2,s2,f3,s3):
-    """Plot all the features
+def concat_and_save_features(f1,s1,f2,s2,f3,s3,chair):
+    """Concatenate the given features on timestampt
 
     Args:
-        f1 (list): feature vector
-        s1 (list): datetime seconds
-        f2 (list): feature vector
-        s2 (list): datetime seconds
-        f3 (list): feature vector
-        s3 (list): datetime seconds
+        f1 (np.array): Mouse Features
+        s1 (np.array): Mouse Seconds
+        f2 (np.array): Keyboard Features
+        s2 (np.array): Keyboard Seconds
+        f3 (np.array): Chair Features
+        s3 (np.array): Chair Seconds
+        chair: Chair Raw .csv file
     """
+    chair_df = pd.read_csv(chair)
+    chair_df['Time'] = chair_df['Time'].str.split(',').str[0]
 
-    #Chair features
-    df = pd.DataFrame(f1, columns = ['M_A0','STD_A0','M_A1','STD_A1','M_A2','STD_A2','M_A3','STD_A3','M_A4','STD_A4'])
-    df['Time'] = s1
-    #Mouse features
-    df2 = pd.DataFrame(f2, columns = ['Velocity_X','Velocity_Y','Clicks','R_Clicks','L_Clicks','M_Clicks'])
-    df2['Time'] = s2
-    #Keyboard features
-    df3 = pd.DataFrame(f3, columns = ['All_keys_N','Arrow_keys_N','Spaces_N','Shft_Ctrl_Alt_N'])
-    df3['Time'] = s3
+    df1 = pd.DataFrame(f1, columns = ['Velocity_X','Velocity_Y','Clicks','R_Clicks','L_Clicks','M_Clicks'])
+    df1['Time'] = convert_seconds(s1)
 
-    fig = make_subplots(rows=4, cols=1, vertical_spacing=0.15, subplot_titles=['Chair Mean', 'Chair Standard Deviation', 'Mouse Metrics', 'Keyboard Metrics'])
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A0'],
-            name='Sensor 1 ave',
-            mode='lines'),
-            1,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A1'],
-            name='Sensor 2 ave',
-            mode='lines'),
-            1,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A2'],
-            name='Sensor 3 ave',
-            mode='lines'),
-            1,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A3'],
-            name='Sensor 4 ave',
-            mode='lines'),
-            1,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A4'],
-            name='Sensor 5 ave',
-            mode='lines'),
-            1,1)
+    df2 = pd.DataFrame(f2, columns = ['All_keys_N','Arrow_keys_N','Spaces_N','Shft_Ctrl_Alt_N'])
+    df2['Time'] = convert_seconds(s2)
 
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A0'],
-            name='Sensor 1 std',
-            mode='markers+lines'),
-            2,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A1'],
-            name='Sensor 2 std',
-            mode='markers+lines'),
-            2,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A2'],
-            name='Sensor 3 std',
-            mode='markers+lines'),
-            2,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A3'],
-            name='Sensor 4 std',
-            mode='markers+lines'),
-            2,1)
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A4'],
-            name='Sensor 5 std',
-            mode='markers+lines'),
-            2,1)
+    df3 = pd.DataFrame(f3, columns = ['M_A0','STD_A0','M_A1','STD_A1','M_A2','STD_A2','M_A3','STD_A3','M_A4','STD_A4'])
+    df3['Time'] = convert_seconds(s3)
 
-    fig.add_trace(go.Scatter(
-            x=df2['Time'],
-            y=df2['Velocity_X'],
-            name='Mouse Speed in X axis',
-            mode='lines+markers'),
-            3,1)
-    fig.add_trace(go.Scatter(
-            x=df2['Time'],
-            y=df2['Velocity_Y'],
-            name='Mouse Speed in Y axis',
-            mode='lines+markers'),
-            3,1)
-    fig.add_trace(go.Scatter(
-            x=df2['Time'],
-            y=df2['Clicks'],
-            name='Mouse Clicks/N',
-            mode='lines+markers'),
-            3,1)
-    fig.add_trace( go.Scatter(
-            x=df2['Time'],
-            y=df2['R_Clicks'],
-            name='Mouse Right Clicks/N',
-            mode='lines+markers'),
-            3,1)
-    fig.add_trace( go.Scatter(
-            x=df2['Time'],
-            y=df2['L_Clicks'],
-            name='Mouse Left Clicks/N',
-            mode='lines+markers'),
-            3,1)
-    fig.add_trace( go.Scatter(
-            x=df2['Time'],
-            y=df2['M_Clicks'],
-            name='Mouse Middle Clicks/N',
-            mode='lines+markers'),
-            3,1)
+    data_frames = [df1, df2, df3]
+    df_merged = reduce(lambda  left,right: pd.merge(left,right,on=['Time'],how='outer'), data_frames).fillna('0.0')
+    df_merged.sort_values(by='Time', inplace=True, ascending=True)
+    col = df_merged.pop('Time')
+    df_merged.insert(0, col.name, col)
+    del df1, df2, df3
 
-    fig.add_trace(go.Scatter(
-            x=df3['Time'],
-            y=df3['All_keys_N'],
-            name='Keyboard All keys/N',
-            mode='lines+markers'),
-            4,1)
-    fig.add_trace(go.Scatter(
-            x=df3['Time'],
-            y=df3['Arrow_keys_N'],
-            name='Keyboard Arrow Keys/N',
-            mode='lines+markers'),
-            4,1)
-    fig.add_trace(go.Scatter(
-            x=df3['Time'],
-            y=df3['Spaces_N'],
-            name='Keyboard Spaces/N',
-            mode='lines+markers'),
-            4,1)
-    fig.add_trace(go.Scatter(
-            x=df3['Time'],
-            y=df3['Shft_Ctrl_Alt_N'],
-            name='Keyboard Key Combo/N',
-            mode='lines+markers'),
-            4, 1)
-    fig.update_layout(title_text='Chair-Mouse-Keyboard-Features', title_x=0.5,width=990, height=1100)
-    py.offline.plot(fig)
+    df = pd.merge( chair_df, df_merged, on=['Time'])
+    df.drop(['Date','A0','A1','A2','A3','A4'], axis = 1, inplace = True)
+    col = df.pop('Label')
+    df.insert(len(df.columns), col.name, col)
+
+    features_file = ''.join((ut.get_date(),'_',ut.get_time(),'.csv'))
+    features_dir = get_features()
+    features_file = os.path.join(features_dir,features_file)
+    df.to_csv(features_file, sep='\t', encoding='utf-8', index=False)
 
 
-def plot_mouse_features(feature,second):
-    """Plot mouse features
+def get_features() -> str:
+    """Get the features path
+
+    Returns:
+        str: The path to save the generated features
+    """
+    current_path = os.path.abspath(os.getcwd())
+    current_path = os.path.join(current_path,'Data_Samples','Test_Action_1')
+    features_path = os.path.join(current_path,'Features')
+    return features_path
+
+
+def extract_features(segment_size):
+    """Extract and save features based on session recordings
 
     Args:
-        feature (list): Modality's features
-        second (datetime obj): Datetime seconds
+        segment_size (int): Segment size(Chunk size) in seconds
     """
-
-    df = pd.DataFrame(feature, columns = ['Velocity_X','Velocity_Y','Clicks','R_Clicks','L_Clicks','M_Clicks'])
-    df['Time'] = second
-
-    fig = go.Figure(data = [
-            go.Scatter(x=df['Time'], y=df['Velocity_X'],
-                name='Speed in X axis',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['Velocity_Y'],
-                name='Speed in Y axis',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['Clicks'],
-                name='Clicks/N',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['R_Clicks'],
-                name='Right Clicks/N',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['L_Clicks'],
-                name='Left Clicks/N',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['M_Clicks'],
-                name='Middle Clicks/N',
-                mode='lines+markers')],
-        layout=go.Layout(title='Mouse Features',xaxis=dict(title='Time',),yaxis=dict(title='Mouse Features',)))
-    py.offline.plot(fig)
-
-
-def plot_key_features(feature,second):
-    """Plot keyboard features
-
-    Args:
-        feature (list): Modality's features
-        second (datetime obj): Datetime seconds
-    """
-
-    df = pd.DataFrame(feature, columns = ['All_keys_N','Arrow_keys_N','Spaces_N','Shft_Ctrl_Alt_N'])
-    df['Time'] = second
-
-    fig = go.Figure(data = [
-            go.Scatter(x=df['Time'], y=df['All_keys_N'],
-                name='All keys/N',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['Arrow_keys_N'],
-                name='Arrow Keys/N',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['Spaces_N'],
-                name='Spaces/N',
-                mode='lines+markers'),
-
-            go.Scatter(x=df['Time'], y=df['Shft_Ctrl_Alt_N'],
-                name='Key Combo/N',
-                mode='lines+markers')],
-        layout=go.Layout(title='Keyboard Features',xaxis=dict(title='Time',),yaxis=dict(title='Keyboard Features',)))
-    py.offline.plot(fig)
-
-
-def plot_chair_features(feature,second):
-    """Plot chair features
-
-    Args:
-        feature (list): Modality's features
-        second (datetime obj): Datetime seconds
-    """
-
-    df = pd.DataFrame(feature, columns = ['M_A0','STD_A0','M_A1','STD_A1','M_A2','STD_A2','M_A3','STD_A3','M_A4','STD_A4'])
-    df['Time'] = second
-    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.2, subplot_titles=['Mean', "Standard Deviation"])
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A0'],
-            name='Sensor 1 ave',
-            mode='lines'),
-            1,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A1'],
-            name='Sensor 2 ave',
-            mode='lines'),
-            1,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A2'],
-            name='Sensor 3 ave',
-            mode='lines'),
-            1,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A3'],
-            name='Sensor 4 ave',
-            mode='lines'),
-            1,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['M_A4'],
-            name='Sensor 5 ave',
-            mode='lines'),
-            1,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A0'],
-            name='Sensor 1 std',
-            mode='markers+lines'),
-            2,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A1'],
-            name='Sensor 2 std',
-            mode='markers+lines'),
-            2,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A2'],
-            name='Sensor 3 std',
-            mode='markers+lines'),
-            2,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A3'],
-            name='Sensor 4 std',
-            mode='markers+lines'),
-            2,1)
-
-    fig.add_trace(go.Scatter(
-            x=df['Time'],
-            y=df['STD_A4'],
-            name='Sensor 5 std',
-            mode='markers+lines'),
-            2,1)
-
-    fig.update_layout(title_text='Chair Sensor Mean and STD', title_x=0.5,width=1500, height=900)
-    py.offline.plot(fig)
+    mouse,keyboard,chair = get_recordings()
+    for m, k, c in zip(mouse, keyboard, chair):
+        mf,mt,_ = get_mouse_features(m,float(segment_size))
+        kf,kt,_ = get_key_features(k,float(segment_size))
+        cf,ct,_ = get_chair_features(c,float(segment_size))
+        concat_and_save_features(mf,mt,kf,kt,cf,ct,c)
