@@ -3,6 +3,7 @@ from serial import Serial
 from datetime import datetime, timedelta
 import pandas as pd
 import collections
+import argparse
 import logging
 import shutil
 import serial
@@ -12,6 +13,20 @@ import os
 
 click_held = False
 button = None
+
+
+def parse_CLI():
+    """CLI arguments
+
+    Returns:
+        number: The number of seconds in order to extract features
+    """
+    parser = argparse.ArgumentParser(description='Collect arguments')
+    parser.add_argument("--segment_size", metavar='segment_size(int)',help="Please provide the segment size")
+    args = parser.parse_args()
+    segment_size = args.segment_size
+
+    return segment_size
 
 
 def on_move(x,y):
@@ -116,38 +131,6 @@ def record_chair(output_file):
             sys.exit(0)
 
 
-def initialize_dirs():
-    """Create the appropriate directories in order to save
-       and process the collected data
-    """
-    current_path = os.path.abspath(os.getcwd())
-    os.chdir('..')
-    current_path = (os.path.abspath(os.curdir)) #/Multodal_User_Monitoring
-    current_path = os.path.join(current_path,'Data')
-    create_subdirs([current_path])
-
-    mouse = os.path.join(current_path,'Mouse')
-    create_subdirs([mouse])
-    #Create mouse subfolders
-    names = concat_names(mouse)
-    create_subdirs(names)
-
-    keyboard = os.path.join(current_path,'Keyboard')
-    create_subdirs([keyboard])
-    #Create keyboard subfolders
-    names = concat_names(keyboard)
-    create_subdirs(names)
-
-    chair = os.path.join(current_path,'Chair')
-    create_subdirs([chair])
-    #Create chair subfolders
-    names = concat_names(chair)
-    create_subdirs(names)
-
-    webcam = os.path.join(current_path,'Webcam')
-    create_subdirs([webcam])
-
-    
 def concat_names(dir) -> str:
     """Concatenate the given folder names
        with the appropriate path
@@ -161,8 +144,7 @@ def concat_names(dir) -> str:
     raw_data = os.path.join(dir,'Raw')
     edited_data = os.path.join(dir,'Edited_logs')
     csv_data = os.path.join(dir,'CSV')
-    features = os.path.join(dir,'Features')
-    dirs = [raw_data,edited_data,csv_data,features]
+    dirs = [raw_data,edited_data,csv_data]
     return dirs
 
 
@@ -202,31 +184,14 @@ def get_date() -> str:
     return datetime.now().strftime('%Y_%m_%d')
 
 
-def get_name(modality) -> str:
-    """Save the recorded log into /Data/<Modality_name>/Raw
-
-    Args:
-        modality (str): The log data source
+def get_time() -> str:
+    """Get the current time in order to properly name
+       the recored log files
 
     Returns:
-        str: The absolute path where each recording is saved
+        str: The current time in H_M_S format
     """
-    current_path = os.path.abspath(os.getcwd())
-    os.chdir('..')
-    current_path = (os.path.abspath(os.curdir))
-    current_path = os.path.join(current_path,'Data')
-
-    if modality == 'Chair':
-        chair_path = os.path.join(current_path,modality,'Raw')
-        return chair_path
-
-    elif modality == 'Mouse':
-        mouse_path = os.path.join(current_path,modality,'Raw')
-        return mouse_path
-
-    elif modality == 'Keyboard':
-        keyboard_path = os.path.join(current_path,modality,'Raw')
-        return keyboard_path
+    return datetime.now().strftime('%H_%M_%S')
 
 
 def time_in_range(start, end, x):
@@ -246,7 +211,7 @@ def crawl_dir(target,folder) -> str:
         folder (str): The folder to search
 
     Returns:
-        [list]: A list containing the file names
+        [type]: A list containing the file names
     """
     current_path = os.path.abspath(os.getcwd())
     path = os.path.join(current_path,folder)
@@ -258,74 +223,56 @@ def crawl_dir(target,folder) -> str:
     return file_names
 
 
-def convert_keys2_csv(input_file,output_file):
-    """Convert the data stream file(keylogger recording) from .txt to .csv format
+def check_divisor(input_file):
+    """Count the file's lines
 
     Args:
-        input_file (str): The data stream file in .txt format
-        output_file (str): The csv extension file name
+        input_file (str): The file to count
+
+    Returns:
+        number: The nearest multiple of five
     """
-    df = pd.read_fwf(input_file)
-    col_names = ['Date','Time','Key']
-    df.to_csv(output_file,header=col_names,encoding='utf-8',index=False)
-
-
-def convert_mouse2_csv(input_file,output_file):
-    """Convert the data stream file(mouselogger recording) from .txt to .csv format
-
-    Args:
-        input_file (str): The data stream file in .txt format
-        output_file (str): The csv extension file name
-    """
-    df = pd.read_fwf(input_file)
-    col_names = ['Date','Time','Action','PosX','PosY','Button']
-    df.to_csv(output_file,header=col_names,encoding='utf-8',index=False)
-
-
-def convert_chair_2_csv(input_file,output_file):
-    """Convert the data stream file(chair recording)
-       from .txt to .csv format
-
-    Args:
-        input_file (str): The data stream file in .txt format
-        output_file (str): The csv extension file name
-    """
-    if(os.path.isfile(input_file)):
-        pass
-    else:
-        print('Invalid working directory...')
-        print('Aborting...')
-        sys.exit(0)
-
-    tmp0,tmp1,tmp2,tmp3,tmp4 = 0,1,2,3,4
-
     line_number = 0
     for line in open(input_file).readlines():
         line_number += 1
 
     rounded_line = round_down(line_number,5)
+    return rounded_line
+
+
+def preprocess_chair_raw_data(input_file):
+    """Transpose the .txt file containing the
+    chair's raw data
+    Args:
+        input_file (str): The .txt file to process
+
+    Returns:
+        list: A list of lists to the .csv corresponding rows
+    """
+
     d = collections.defaultdict(list)
+    tmp0,tmp1,tmp2,tmp3,tmp4 = 0,1,2,3,4
+    rounded_line = check_divisor(input_file)
 
     with open(input_file,'r') as f1:
         lines = f1.readlines()
         for i in range(rounded_line // 5):
-            #Sensor:Analog input 0 values
             Sid0 = lines[i+tmp0]
             temp = Sid0.split()
             d['Sid0'].append([temp[0],temp[1],temp[2],temp[3]])
-            #Sensor:Analog input 1 values
+
             Sid1 = lines[i+tmp1]
             temp = Sid1.split()
             d['Sid1'].append([temp[0],temp[1],temp[2],temp[3]])
-            #Sensor:Analog input 2 values
+
             Sid2 = lines[i+tmp2]
             temp = Sid2.split()
             d['Sid2'].append([temp[0],temp[1],temp[2],temp[3]])
-            #Sensor:Analog input 3 values
+
             Sid3 = lines[i+tmp3]
             temp = Sid3.split()
             d['Sid3'].append([temp[0],temp[1],temp[2],temp[3]])
-            #Sensor:Analog input 4 values
+
             Sid4 = lines[i+tmp4]
             temp = Sid4.split()
             d['Sid4'].append([temp[0],temp[1],temp[2],temp[3]])
@@ -347,10 +294,216 @@ def convert_chair_2_csv(input_file,output_file):
         A4_val = d['Sid4'][i][3]
         l.append([date,time,A0_val,A1_val,A2_val,A3_val,A4_val])
 
-    sensor_readings_df = pd.DataFrame.from_records(l)
-    sensor_readings_df.columns = ['Date','Time','A0','A1','A2','A3','A4']
-    sensor_readings_df.to_csv(output_file, encoding='utf-8', index=False)
-    del l
+    return l
+
+
+def convert_keys2_csv(input_file,output_file):
+    """Convert the data stream file(keylogger recording) from .txt to .csv format
+
+    Args:
+        input_file (str): The data stream file in .txt format
+        output_file (str): The csv extension file name
+    """
+    if os.stat(input_file).st_size != 0:
+        df = pd.read_fwf(input_file)
+        col_names = ['Date','Time','Key']
+        df.to_csv(output_file,header=col_names,encoding='utf-8',index=False)
+
+
+def convert_mouse2_csv(input_file,output_file):
+    """Convert the data stream file(mouselogger recording) from .txt to .csv format
+
+    Args:
+        input_file (str): The data stream file in .txt format
+        output_file (str): The csv extension file name
+    """
+    if os.stat(input_file).st_size != 0:
+        df = pd.read_fwf(input_file)
+        col_names = ['Date','Time','Action','PosX','PosY','Button']
+        df.to_csv(output_file,header=col_names,encoding='utf-8',index=False)
+
+
+def convert_chair_2_csv(input_file,output_file):
+    """Convert the data stream file(chair recording)
+       from .txt to .csv format
+
+    Args:
+        input_file (str): The data stream file in .txt format
+        output_file (str): The csv extension file name
+    """
+    if os.stat(input_file).st_size != 0:
+        l = preprocess_chair_raw_data(input_file)
+        sensor_readings_df = pd.DataFrame.from_records(l)
+        sensor_readings_df.columns = ['Date','Time','A0','A1','A2','A3','A4']
+        sensor_readings_df.to_csv(output_file, encoding='utf-8', index=False)
+        del l
+
+
+def get_dirs(modality):
+    current_path = os.path.abspath(os.getcwd())
+    os.chdir('..')
+    current_path = (os.path.abspath(os.curdir))
+    os.chdir('./Data')
+    current_path = (os.path.abspath(os.curdir))
+    current_path = os.path.join(current_path,modality)
+    raw_data_path = os.path.join(current_path,'Raw')
+    csv_data_path = os.path.join(current_path,'CSV')
+    edited_logs_path = os.path.join(current_path,'Edited_logs')
+    features_path = os.path.join(current_path,'Features')
+
+    return raw_data_path, csv_data_path, edited_logs_path, features_path
+
+def get_dirs_by_date(modality):
+    current_path = os.path.abspath(os.getcwd())
+    os.chdir('..')
+    current_path = (os.path.abspath(os.curdir))
+    os.chdir('./Data')
+    current_path = (os.path.abspath(os.curdir))
+    current_path = os.path.join(current_path,get_date(),modality)
+    raw_data_path = os.path.join(current_path,'Raw')
+    csv_data_path = os.path.join(current_path,'CSV')
+    edited_logs_path = os.path.join(current_path,'Edited_logs')
+    features_path = os.path.join(current_path,'Features')
+
+    return raw_data_path, csv_data_path, edited_logs_path, features_path
+
+
+def initialize_dirs_by_date():
+    """Create the appropriate directories in order to save
+       and process the collected data
+    """
+    current_path = os.path.abspath(os.getcwd())
+    os.chdir('..')
+    current_path = (os.path.abspath(os.curdir)) #Parent folder
+    current_path = os.path.join(current_path,'Data')
+    create_subdirs([current_path])
+
+    #Create the date folder
+    current_path = os.path.join(current_path,get_date())
+    create_subdirs([current_path])
+
+    #Create the feature folder
+    features = os.path.join(current_path,'Features')
+    create_subdirs([features])
+
+    #Create mouse log folder
+    mouse = os.path.join(current_path,'Mouse')
+    create_subdirs([mouse])
+    #Create mouse subfolders
+    names = concat_names(mouse)
+    create_subdirs(names)
+
+    #Create keyboard log  folder
+    keyboard = os.path.join(current_path,'Keyboard')
+    create_subdirs([keyboard])
+    #Create keyboard subfolders
+    names = concat_names(keyboard)
+    create_subdirs(names)
+
+    #Create the chair log folder
+    chair = os.path.join(current_path,'Chair')
+    create_subdirs([chair])
+    #Create chair subfolders
+    names = concat_names(chair)
+    create_subdirs(names)
+
+    #Create webcam log folder
+    webcam = os.path.join(current_path,'Webcam')
+    create_subdirs([webcam])
+
+
+def initialize_dirs():
+    """Create the appropriate directories in order to save
+       and process the collected data
+    """
+    current_path = os.path.abspath(os.getcwd())
+    os.chdir('..')
+    current_path = (os.path.abspath(os.curdir)) #Parent folder
+    current_path = os.path.join(current_path,'Data')
+    create_subdirs([current_path])
+
+    features = os.path.join(current_path,'Features')
+    create_subdirs([features])
+
+    #Create mouse log folder
+    mouse = os.path.join(current_path,'Mouse')
+    create_subdirs([mouse])
+    #Create mouse subfolders
+    names = concat_names(mouse)
+    create_subdirs(names)
+
+    #Create keyboard log  folder
+    keyboard = os.path.join(current_path,'Keyboard')
+    create_subdirs([keyboard])
+    #Create keyboard subfolders
+    names = concat_names(keyboard)
+    create_subdirs(names)
+
+    #Create the chair log folder
+    chair = os.path.join(current_path,'Chair')
+    create_subdirs([chair])
+    #Create chair subfolders
+    names = concat_names(chair)
+    create_subdirs(names)
+
+    #Create webcam log folder
+    webcam = os.path.join(current_path,'Webcam')
+    create_subdirs([webcam])
+
+
+def get_name_by_date(modality,dest) -> str:
+    """Save the recorded log into /Data/Date/<Modality_name>/Raw
+
+    Args:
+        modality (str): The log data source
+        dest(str): The folder to save the data
+    Returns:
+        str: The absolute path where each recording is saved
+    """
+    current_path = os.path.abspath(os.getcwd())
+    os.chdir('..')
+    current_path = (os.path.abspath(os.curdir))
+    current_path = os.path.join(current_path,'Data',get_date())
+
+    if modality == 'Chair':
+        chair_path = os.path.join(current_path,modality,dest)
+        return chair_path
+
+    elif modality == 'Mouse':
+        mouse_path = os.path.join(current_path,modality,dest)
+        return mouse_path
+
+    elif modality == 'Keyboard':
+        keyboard_path = os.path.join(current_path,modality,dest)
+        return keyboard_path
+
+
+def get_name(modality,dest) -> str:
+    """Save the recorded log into /Data/<Modality_name>/Raw
+
+    Args:
+        modality (str): The log data source
+        dest(str): The folder to save the data
+
+    Returns:
+        str: The absolute path where each recording is saved
+    """
+    current_path = os.path.abspath(os.getcwd())
+    os.chdir('..')
+    current_path = (os.path.abspath(os.curdir))
+    current_path = os.path.join(current_path,'Data')
+
+    if modality == 'Chair':
+        chair_path = os.path.join(current_path,modality,dest)
+        return chair_path
+
+    elif modality == 'Mouse':
+        mouse_path = os.path.join(current_path,modality,dest)
+        return mouse_path
+
+    elif modality == 'Keyboard':
+        keyboard_path = os.path.join(current_path,modality,dest)
+        return keyboard_path
 
 
 def parse_raw_data(modality):
@@ -360,16 +513,7 @@ def parse_raw_data(modality):
     Args:
         modality (str): The data source
     """
-    #Change directories
-    current_path = os.path.abspath(os.getcwd()) #Current dir
-    os.chdir('..')
-    current_path = (os.path.abspath(os.curdir)) #Parent dir
-    os.chdir('./Data')#/Multimodal_User_Monitoring/Data
-    current_path = (os.path.abspath(os.curdir))
-    current_path = os.path.join(current_path,modality)
-    raw_data_path = os.path.join(current_path,'Raw')
-    csv_data_path = os.path.join(current_path,'CSV')
-    edited_logs_path = os.path.join(current_path,'Edited_logs')
+    raw_data_path, csv_data_path, edited_logs_path,_ = get_dirs(modality)
 
     txt_names = crawl_dir('.txt',raw_data_path)
     csv_names = []
@@ -382,17 +526,59 @@ def parse_raw_data(modality):
     if modality == 'Mouse':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
+            #for i in range(len(txt_names)):
                 convert_mouse2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Keyboard':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
+            #for i in range(len(txt_names)):
                 convert_keys2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Chair':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
+            #for i in range(len(txt_names)):
+                convert_chair_2_csv(txt_names[i],csv_names[i])
+                shutil.move(txt_names[i],edited_logs_path)
+
+
+def parse_raw_data_by_date(modality):
+    """Convert each modality's raw data into csv format and move
+       the edited raw data into the appropriate Edited_logs folder
+
+    Args:
+        modality (str): The data source
+    """
+    raw_data_path, csv_data_path, edited_logs_path,_ = get_dirs_by_date(modality)
+
+    txt_names = crawl_dir('.txt',raw_data_path)
+    csv_names = []
+    for elem in txt_names:
+        name = elem.split('/')[-1].split('.')[0]
+        csv_name = name+'.csv'
+        tmp = os.path.join(csv_data_path,csv_name)
+        csv_names.append(tmp)
+
+    if modality == 'Mouse':
+        if len(txt_names) == len(csv_names):
+            for i, elem in enumerate(txt_names):
+            #for i in range(len(txt_names)):
+                convert_mouse2_csv(txt_names[i],csv_names[i])
+                shutil.move(txt_names[i],edited_logs_path)
+
+    elif modality == 'Keyboard':
+        if len(txt_names) == len(csv_names):
+            for i, elem in enumerate(txt_names):
+            #for i in range(len(txt_names)):
+                convert_keys2_csv(txt_names[i],csv_names[i])
+                shutil.move(txt_names[i],edited_logs_path)
+
+    elif modality == 'Chair':
+        if len(txt_names) == len(csv_names):
+            for i, elem in enumerate(txt_names):
+            #for i in range(len(txt_names)):
                 convert_chair_2_csv(txt_names[i],csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
