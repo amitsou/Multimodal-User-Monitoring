@@ -39,7 +39,11 @@ Keep in mind that there's also an implementation of the following tree structure
     ├───Webcam
     ├───Features
 ```
-If you wish to create the aforementioned tree structure execute the following script:/Loggers/initialize_dirs.py
+If you wish to create the aforementioned tree structure execute the following script:
+```
+$cd /Loggers
+$python3 initialize_dirs.py
+```
 
 ### Prerequisites
 
@@ -47,19 +51,19 @@ In order to execute the code in this repository you'll need the following instal
 * FFMPEG for Linux version: 4.2.4-1ubuntu0.1 
 
   ``` 
-  sudo apt install ffmpeg  
+  $sudo apt install ffmpeg  
   ```
 
 * Video for linux utilities v4l-utils 
   
   ```
-  sudo apt install v4l-utils
+  $sudo apt install v4l-utils
   ```
  
  * In order to execute the webcamlogger you'll need to check for the installed devices on your PC
 
    ```
-   v4l2-ctl --list-devices   
+   $v4l2-ctl --list-devices   
    ```
 
 * pynput for python3: [https://pypi.org/project/pynput/](https://pypi.org/project/pynput/)
