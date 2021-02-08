@@ -19,7 +19,27 @@ After the data collection process we create the Feature Vectors in order to crea
 ## Getting Started
 
 To use the existing code you must use force resistance sensors mounted on a chair. These sensors should be connected with an Arduino UNO in order to send the data via the serial monitor (through the USB port). Don't worry if you don't own any FSR sensors. You could easily use any of the remaining code files due to the reason that every file can be executed individually.</br> 
-Example: If you wish to use only one modality, f.i. say you want to run a webcamlogger in order to get the user's facial expressions every minute, it can be achieved by executing './webcamlogger.sh.'  
+Example: If you wish to use only one modality, f.i. say you want to run a webcamlogger in order to get the user's facial expressions every minute, it can be achieved by executing './webcamlogger.sh.'</br>
+Keep in mind that there's also an implementation of the following tree structure in order to organize your recordings:
+
+```
+├───Data
+    ├───Mouse
+        ├───Raw 
+        ├───Edited_logs
+        ├───CSV
+    ├───Keyboard
+        ├───Raw 
+        ├───Edited_logs
+        ├───CSV
+    ├───Chair
+        ├───Raw 
+        ├───Edited_logs
+        ├───CSV
+    ├───Webcam
+    ├───Features
+```
+If you wish to create the aforementioned tree structure execute the following script:/Loggers/initialize_dirs.py
 
 ### Prerequisites
 
