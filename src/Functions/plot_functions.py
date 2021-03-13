@@ -5,6 +5,7 @@ import plotly.graph_objs as go
 import plotly as py
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import time
 import os
 import sys
@@ -25,9 +26,11 @@ def plot_all(f1,s1,f2,s2,f3,s3):
     #Chair features
     df = pd.DataFrame(f1, columns = ['M_A0','STD_A0','M_A1','STD_A1','M_A2','STD_A2','M_A3','STD_A3','M_A4','STD_A4'])
     df['Time'] = s1
+
     #Mouse features
     df2 = pd.DataFrame(f2, columns = ['Velocity_X','Velocity_Y','Clicks','R_Clicks','L_Clicks','M_Clicks'])
     df2['Time'] = s2
+
     #Keyboard features
     df3 = pd.DataFrame(f3, columns = ['All_keys_N','Arrow_keys_N','Spaces_N','Shft_Ctrl_Alt_N'])
     df3['Time'] = s3
@@ -442,19 +445,69 @@ def plot_all_raw(f1,f2,f3):
 def plot_features(segment_size):
     mouse,keyboard,chair = ft.get_recordings()
     for m, k, c in zip(mouse, keyboard, chair):
-        mf,mt,mstart = ft.get_mouse_features(m,float(segment_size))
+        mf,mt,_ = ft.get_mouse_features(m,float(segment_size))
         mouse_seconds = ft.convert_seconds(mt)
         plot_mouse_features(mf, mouse_seconds)
         time.sleep(1)
 
-        kf,kt,kstart = ft.get_key_features(k,float(segment_size))
+        kf,kt,_ = ft.get_key_features(k,float(segment_size))
         key_seconds = ft.convert_seconds(kt)
         plot_key_features(kf, key_seconds)
         time.sleep(1)
 
-        cf,ct,cstart = ft.get_chair_features(c,float(segment_size))
+        cf,ct,_ = ft.get_chair_features(c,float(segment_size))
         chair_seconds = ft.convert_seconds(ct)
         plot_chair_features(cf, chair_seconds)
         time.sleep(1)
 
         plot_all(cf,chair_seconds,mf,mouse_seconds,kf,key_seconds)
+
+
+def plot_feature_histograms(list_of_feature_mtr, feature_names,
+                            class_names, n_columns=5):
+    '''
+    Plots the histograms of all classes and features for a given
+    classification task.
+    :param list_of_feature_mtr: list of feature matrices
+                                (n_samples x n_features) for each class
+    :param feature_names:       list of feature names
+    :param class_names:         list of class names, for each feature matr
+    '''
+    n_features = len(feature_names)
+    n_bins = 12 #todo: add 20 bins
+    n_rows = int(n_features / n_columns) + 1
+
+    figs = py.subplots.make_subplots(rows=n_rows, cols=n_columns,subplot_titles=feature_names)
+    figs['layout'].update(height=(n_rows * 250))
+    clr = get_color_combinations(len(class_names))
+
+    for i in range(n_features):
+        # for each feature get its bin range (min:(max-min)/n_bins:max)
+        f = np.vstack([x[:, i:i + 1] for x in list_of_feature_mtr])
+        bins = np.arange(f.min(), f.max(), (f.max() - f.min()) / n_bins)
+        for fi, f in enumerate(list_of_feature_mtr):
+            # load the color for the current class (fi)
+            mark_prop = dict(color=clr[fi], line=dict(color=clr[fi], width=3))
+            # compute the histogram of the current feature (i) and normalize:
+            h, _ = np.histogram(f[:, i], bins=bins)
+            h = h.astype(float) / h.sum()
+            cbins = (bins[0:-1] + bins[1:]) / 2
+            scatter_1 = go.Scatter(x=cbins, y=h, name=class_names[fi],marker=mark_prop, showlegend=(i == 0))
+            # (show the legend only on the first line)
+            figs.append_trace(scatter_1, int(i/n_columns)+1, i % n_columns+1)
+
+    for i in figs['layout']['annotations']:
+        i['font'] = dict(size=10, color='#224488')
+    py.offline.plot(figs, filename="report.html", auto_open=True)
+
+
+def get_color_combinations(n_classes):
+    clr_map = plt.cm.get_cmap('jet')
+    range_cl = range(int(int(255/n_classes)/2), 255, int(255/n_classes))
+    clr = []
+    for i in range(n_classes):
+        clr.append('rgba({},{},{},{})'.format(clr_map(range_cl[i])[0],
+                                              clr_map(range_cl[i])[1],
+                                              clr_map(range_cl[i])[2],
+                                              clr_map(range_cl[i])[3]))
+    return clr
