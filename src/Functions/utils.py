@@ -52,6 +52,7 @@ def on_click(x,y,button,pressed):
         pressed (bool): Pressed is whether the button was pressed
     """
     global click_held
+
     if pressed:
         click_held = True
         logging.info("CLK    {0:>7}    {1:>6}    {2:>13}".format(x,y,button))
@@ -91,8 +92,7 @@ def on_press_keys(key):
     ]
 
     key = str(key).strip('\'')
-    if(key in subkeys):
-        #print(key)
+    if key in subkeys:
         logging.info(key)
     else:
         pass
@@ -109,19 +109,21 @@ def record_chair(output_file):
     baud_rate = 9600
     ser = serial.Serial(serial_port,baud_rate)
     logging.basicConfig(filename=output_file,level=logging.DEBUG,format="%(asctime)s    %(message)s")
+
     flag = False
     start = time.time()
-    while time.time() - start < 60.0:
+
+    while time.time() - start < 100.0:
         try:
             serial_data = str(ser.readline().decode().strip('\r\n'))
             time.sleep(0.2)
             tmp = serial_data.split('  ')[0] #Getting Sensor Id
-            if(tmp == 'A0'):
+            if tmp == 'A0':
                 flag = True
-            if (flag and tmp != 'A4'):
+            if flag and tmp != 'A4':
                 #print(serial_data)
                 logging.info(serial_data)
-            if(flag and tmp == 'A4'):
+            if flag and tmp == 'A4':
                 flag = False
                 #print(serial_data)
                 logging.info(serial_data)
@@ -215,9 +217,10 @@ def crawl_dir(target,folder) -> str:
     """
     current_path = os.path.abspath(os.getcwd())
     path = os.path.join(current_path,folder)
+
     file_names =[]
     for f in os.listdir(path):
-        if(f.endswith(target)):
+        if f.endswith(target):
             fname=os.path.join(path,f)
             file_names.append(fname)
     return file_names
@@ -232,10 +235,7 @@ def check_divisor(input_file):
     Returns:
         number: The nearest multiple of five
     """
-    line_number = 0
-    for line in open(input_file).readlines():
-        line_number += 1
-
+    line_number = count_lines(input_file)
     rounded_line = round_down(line_number,5)
     return rounded_line
 
@@ -338,12 +338,14 @@ def convert_chair_2_csv(input_file,output_file):
         sensor_readings_df.to_csv(output_file, encoding='utf-8', index=False)
         del l
 
-
-def get_dirs(modality):
+#REVIEW
+def get_dirs(modality) -> list:
     current_path = os.path.abspath(os.getcwd())
     os.chdir('..')
     current_path = (os.path.abspath(os.curdir))
+    #os.chdir('./Debug')
     os.chdir('./Data')
+    #os.chdir('./Data_Samples')
     current_path = (os.path.abspath(os.curdir))
     current_path = os.path.join(current_path,modality)
     raw_data_path = os.path.join(current_path,'Raw')
@@ -352,64 +354,6 @@ def get_dirs(modality):
     features_path = os.path.join(current_path,'Features')
 
     return raw_data_path, csv_data_path, edited_logs_path, features_path
-
-def get_dirs_by_date(modality):
-    current_path = os.path.abspath(os.getcwd())
-    os.chdir('..')
-    current_path = (os.path.abspath(os.curdir))
-    os.chdir('./Data')
-    current_path = (os.path.abspath(os.curdir))
-    current_path = os.path.join(current_path,get_date(),modality)
-    raw_data_path = os.path.join(current_path,'Raw')
-    csv_data_path = os.path.join(current_path,'CSV')
-    edited_logs_path = os.path.join(current_path,'Edited_logs')
-    features_path = os.path.join(current_path,'Features')
-
-    return raw_data_path, csv_data_path, edited_logs_path, features_path
-
-
-def initialize_dirs_by_date():
-    """Create the appropriate directories in order to save
-       and process the collected data
-    """
-    current_path = os.path.abspath(os.getcwd())
-    os.chdir('..')
-    current_path = (os.path.abspath(os.curdir)) #Parent folder
-    current_path = os.path.join(current_path,'Data')
-    create_subdirs([current_path])
-
-    #Create the date folder
-    current_path = os.path.join(current_path,get_date())
-    create_subdirs([current_path])
-
-    #Create the feature folder
-    features = os.path.join(current_path,'Features')
-    create_subdirs([features])
-
-    #Create mouse log folder
-    mouse = os.path.join(current_path,'Mouse')
-    create_subdirs([mouse])
-    #Create mouse subfolders
-    names = concat_names(mouse)
-    create_subdirs(names)
-
-    #Create keyboard log  folder
-    keyboard = os.path.join(current_path,'Keyboard')
-    create_subdirs([keyboard])
-    #Create keyboard subfolders
-    names = concat_names(keyboard)
-    create_subdirs(names)
-
-    #Create the chair log folder
-    chair = os.path.join(current_path,'Chair')
-    create_subdirs([chair])
-    #Create chair subfolders
-    names = concat_names(chair)
-    create_subdirs(names)
-
-    #Create webcam log folder
-    webcam = os.path.join(current_path,'Webcam')
-    create_subdirs([webcam])
 
 
 def initialize_dirs():
@@ -449,33 +393,6 @@ def initialize_dirs():
     #Create webcam log folder
     webcam = os.path.join(current_path,'Webcam')
     create_subdirs([webcam])
-
-
-def get_name_by_date(modality,dest) -> str:
-    """Save the recorded log into /Data/Date/<Modality_name>/Raw
-
-    Args:
-        modality (str): The log data source
-        dest(str): The folder to save the data
-    Returns:
-        str: The absolute path where each recording is saved
-    """
-    current_path = os.path.abspath(os.getcwd())
-    os.chdir('..')
-    current_path = (os.path.abspath(os.curdir))
-    current_path = os.path.join(current_path,'Data',get_date())
-
-    if modality == 'Chair':
-        chair_path = os.path.join(current_path,modality,dest)
-        return chair_path
-
-    elif modality == 'Mouse':
-        mouse_path = os.path.join(current_path,modality,dest)
-        return mouse_path
-
-    elif modality == 'Keyboard':
-        keyboard_path = os.path.join(current_path,modality,dest)
-        return keyboard_path
 
 
 def get_name(modality,dest) -> str:
@@ -526,59 +443,188 @@ def parse_raw_data(modality):
     if modality == 'Mouse':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_mouse2_csv(txt_names[i],csv_names[i])
+                add_mouse_missing_values(csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Keyboard':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_keys2_csv(txt_names[i],csv_names[i])
+                add_key_missing_values(csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
     elif modality == 'Chair':
         if len(txt_names) == len(csv_names):
             for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
                 convert_chair_2_csv(txt_names[i],csv_names[i])
+                add_chair_missing_values(csv_names[i])
                 shutil.move(txt_names[i],edited_logs_path)
 
 
-def parse_raw_data_by_date(modality):
-    """Convert each modality's raw data into csv format and move
-       the edited raw data into the appropriate Edited_logs folder
+def splitall(path) -> list:
+    """Split a string containing an abs path into parts
 
     Args:
-        modality (str): The data source
+        path (str): The abs path to the directory
+
+    Returns:
+        list: A list containing the string parts
     """
-    raw_data_path, csv_data_path, edited_logs_path,_ = get_dirs_by_date(modality)
+    allparts = []
+    while 1:
+        parts = os.path.split(path)
+        if parts[0] == path:  # sentinel for absolute paths
+            allparts.insert(0, parts[0])
+            break
+        elif parts[1] == path: # sentinel for relative paths
+            allparts.insert(0, parts[1])
+            break
+        else:
+            path = parts[0]
+            allparts.insert(0, parts[1])
+    return allparts
 
-    txt_names = crawl_dir('.txt',raw_data_path)
-    csv_names = []
-    for elem in txt_names:
-        name = elem.split('/')[-1].split('.')[0]
-        csv_name = name+'.csv'
-        tmp = os.path.join(csv_data_path,csv_name)
-        csv_names.append(tmp)
 
-    if modality == 'Mouse':
-        if len(txt_names) == len(csv_names):
-            for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
-                convert_mouse2_csv(txt_names[i],csv_names[i])
-                shutil.move(txt_names[i],edited_logs_path)
+def check_empty(path) -> tuple:
+    """Check if a given file does not contain any data
 
-    elif modality == 'Keyboard':
-        if len(txt_names) == len(csv_names):
-            for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
-                convert_keys2_csv(txt_names[i],csv_names[i])
-                shutil.move(txt_names[i],edited_logs_path)
+    Args:
+        path (str): The abs path to the directory
 
-    elif modality == 'Chair':
-        if len(txt_names) == len(csv_names):
-            for i, elem in enumerate(txt_names):
-            #for i in range(len(txt_names)):
-                convert_chair_2_csv(txt_names[i],csv_names[i])
-                shutil.move(txt_names[i],edited_logs_path)
+    Returns:
+        tuple: A tuple containing a bool and a message
+    """
+    tmp = splitall(path)
+    df = pd.read_csv(path)
+
+    if df.empty:
+        if 'Keyboard' in tmp:
+            msg = 'Empty Keyboard File, name:',tmp[-1]
+            return True, msg
+        elif 'Mouse' in tmp:
+            msg = 'Empty Mouse File, name:',tmp[-1]
+            return True, msg
+        elif 'Chair' in tmp:
+            msg = 'Empty Chair File, name:',tmp[-1]
+            return True, msg
+    msg = 'No empty Dataframe'
+    return False, msg
+
+
+def count_lines(input_file) -> int:
+    """Count the lines of a given file
+
+    Args:
+        input_file (str): The file to open
+
+    Returns:
+        int: An integer that shows the line number
+    """
+    with open(input_file) as f:
+        return sum(1 for line in f)
+
+
+def list_dir(path,target):
+    file_names =[]
+    for f in os.listdir(path):
+        if(f.endswith(target)):
+            fname=os.path.join(path,f)
+            file_names.append(fname)
+    return file_names
+
+
+def preprocess_empty():
+    """Find the empty .csv files for keyboard and mouse.
+
+       This function fills the empty files with time
+       and date based on the recorded chair .csv file.
+
+       It also fills with zero or None values the empty cells
+       This function is useful for the absent class
+    """
+    _, chair_dir, _, _ = get_dirs('Chair')
+    _, keys_dir, _, _ = get_dirs('Keyboard')
+    _, mouse_dir, _, _ = get_dirs('Mouse')
+
+    chair_files = list_dir(chair_dir,'.csv')
+    key_files = list_dir(keys_dir,'.csv')
+    mouse_files = list_dir(mouse_dir,'.csv')
+
+    pairs = [(i, j, k) for i in mouse_files for j in key_files for k in chair_files if i.split('/')[-1].split('.')[0] == j.split('/')[-1].split('.')[0] == k.split('/')[-1].split('.')[0]]
+    for m,k,c in pairs:
+        chair_df = pd.read_csv(c)
+
+        key_empt, _ = check_empty(k)
+        mouse_empt, _ = check_empty(m)
+
+        if key_empt:
+            key_df = pd.read_csv(k)
+            key_df['Date'] = chair_df['Date']
+            key_df['Time'] = chair_df['Time']
+            key_df['Key'] = 'None'
+            key_df.to_csv(k, mode='a', header=False, index=False)
+            del key_df
+
+        if mouse_empt:
+            mouse_df = pd.read_csv(m)
+            mouse_df['Date'] = chair_df['Date']
+            mouse_df['Time'] = chair_df['Time']
+            mouse_df['PosX'] = mouse_df['PosX'].fillna(0)
+            mouse_df['PosY'] = mouse_df['PosY'].fillna(0)
+            mouse_df['Action'] = 'None'
+            mouse_df['Button'] = 'None'
+            mouse_df.to_csv(m, mode='a', header=False, index=False)
+            del mouse_df
+
+
+def insert_last_timestamp(filename):
+    """Insert the timestamp value after the recording has terminated
+
+    Args:
+        filename (str): The file to open
+    """
+    #now = datetime.datetime.now()
+    now = datetime.now()
+    date = now.date()
+    date = str(date)
+    timestamp = ('{:%H:%M:%S}.{:03.0f}'.format(now.time(),now.time().microsecond/1000.0)).replace('.',',')
+
+    with open(filename, 'a') as f:
+        f.write(date)
+        f.write(' ')
+        f.write(timestamp)
+
+
+def add_mouse_missing_values(filename):
+    """Add the missing values for the last recorded timestamp
+
+    Args:
+        filename (str): The csv file to process
+    """
+    df = pd.read_csv(filename)
+    df[['Action','Button']] = df[['Action','Button']].fillna(value='None')
+    df[['PosX','PosY']] = df[['PosX','PosY']].fillna(value=0)
+    df.to_csv(filename, mode='a', index = False, header=False)
+
+
+def add_key_missing_values(filename):
+    """Add the missing values for the last recorded timestamp
+
+    Args:
+        filename (str): The csv file to process
+    """
+    df = pd.read_csv(filename)
+    df[['Key']] = df[['Key']].fillna(value='None')
+    df.to_csv(filename, mode='a', index = False, header=False)
+
+
+def add_chair_missing_values(filename):
+    """Add the missing values for the last recorded timestamp
+
+    Args:
+        filename (str): The csv file to process
+    """
+    df = pd.read_csv(filename)
+    df[['A0','A1','A2','A3','A4']] = df[['A0','A1','A2','A3','A4']].fillna(value=0)
+    df.to_csv(filename, mode='a', index = False, header=False)
