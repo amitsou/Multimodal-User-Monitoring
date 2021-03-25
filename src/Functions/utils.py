@@ -343,9 +343,10 @@ def get_dirs(modality) -> list:
     current_path = os.path.abspath(os.getcwd())
     os.chdir('..')
     current_path = (os.path.abspath(os.curdir))
+
     #os.chdir('./Debug')
     os.chdir('./Data')
-    #os.chdir('./Data_Samples')
+
     current_path = (os.path.abspath(os.curdir))
     current_path = os.path.join(current_path,modality)
     raw_data_path = os.path.join(current_path,'Raw')
