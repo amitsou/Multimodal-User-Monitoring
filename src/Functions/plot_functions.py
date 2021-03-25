@@ -484,6 +484,11 @@ def plot_feature_histograms(list_of_feature_mtr, feature_names,
     for i in range(n_features):
         # for each feature get its bin range (min:(max-min)/n_bins:max)
         f = np.vstack([x[:, i:i + 1] for x in list_of_feature_mtr])
+
+        if np.all(f == 0.0):
+                #print(f)
+                continue
+
         bins = np.arange(f.min(), f.max(), (f.max() - f.min()) / n_bins)
         for fi, f in enumerate(list_of_feature_mtr):
             # load the color for the current class (fi)
