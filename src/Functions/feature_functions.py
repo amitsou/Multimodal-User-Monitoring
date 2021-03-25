@@ -31,19 +31,25 @@ def get_recordings():
     os.chdir('..')
     current_path = (os.path.abspath(os.curdir))
 
-    mouse = os.path.join(current_path,'Debug','Mouse','CSV')
+    mouse = os.path.join(current_path,'Data','Mouse','CSV')
+    #mouse = os.path.join(current_path,'Debug','Mouse','CSV')
+
     mouse_files = []
     for f in os.listdir(mouse):
         tmp = '/'.join((mouse,f))
         mouse_files.append(tmp)
 
-    keyboard = os.path.join(current_path,'Debug','Keyboard','CSV')
+    keyboard = os.path.join(current_path,'Data','Keyboard','CSV')
+    #keyboard = os.path.join(current_path,'Debug','Keyboard','CSV')
+
     keyboard_files = []
     for f in os.listdir(keyboard):
         tmp = '/'.join((keyboard,f))
         keyboard_files.append(tmp)
 
-    chair = os.path.join(current_path,'Debug','Chair','CSV')
+    chair = os.path.join(current_path,'Data','Chair','CSV')
+    #chair = os.path.join(current_path,'Debug','Chair','CSV')
+
     chair_files = []
     for f in os.listdir(chair):
         tmp = '/'.join((chair,f))
@@ -330,13 +336,17 @@ def get_chair_features(filename,segment_size):
         cur_A3 = [A3 for i, A3 in enumerate(a3) if times_seconds[i] >=start and times_seconds[i] <= end]
         cur_A4 = [A4 for i, A4 in enumerate(a4) if times_seconds[i] >=start and times_seconds[i] <= end]
 
-        features.append([mean(cur_A0), stdev(cur_A0), mean(cur_A1), stdev(cur_A1),mean(cur_A2),
-                        stdev(cur_A2), mean(cur_A3), stdev(cur_A3), mean(cur_A4), stdev(cur_A4)])
-        segment_centers.append(start + segment_size / 2)
+        if not (cur_A0 or cur_A1 or cur_A2 or cur_A3):
+            features.append([0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+            segment_centers.append(start + segment_size / 2)
+
+        else:
+            features.append([mean(cur_A0), stdev(cur_A0), mean(cur_A1), stdev(cur_A1),mean(cur_A2),
+                            stdev(cur_A2), mean(cur_A3), stdev(cur_A3), mean(cur_A4), stdev(cur_A4)])
+            segment_centers.append(start + segment_size / 2)
+
         start += segment_size
 
-    features = np.array(features)
-    segment_centers = np.array(segment_centers)
     return features, segment_centers, day_start
 
 
@@ -348,7 +358,10 @@ def get_features() -> str:
         str: The path to save the generated features
     """
     current_path = os.path.abspath(os.getcwd())
-    current_path = os.path.join(current_path,'Debug')
+
+    current_path = os.path.join(current_path,'Data')
+    #current_path = os.path.join(current_path,'Debug')
+
     features_path = os.path.join(current_path,'Features')
     return features_path
 
@@ -363,11 +376,10 @@ def extract_features(segment_size):
     pairs = [(i, j, k) for i in mouse for j in keyboard for k in chair if i.split('/')[-1].split('.')[0] == j.split('/')[-1].split('.')[0] == k.split('/')[-1].split('.')[0]]
 
     for m,k,c in pairs:
-        '''
+
         print(m)
         print(k)
-        print(c)
-        '''
+        print(c,'\n')
 
         kf, kt, _ = get_key_features(k,float(segment_size))
         k_segment_centers = convert_seconds(kt)
@@ -397,6 +409,7 @@ def extract_features(segment_size):
             #Get the annotated labels from chair recording
             chair = pd.read_csv(c)
             chair = chair.drop(['A0','A1','A2','A3','A4'], axis = 1)
+
             labels = list(chair['Label'])
             dates = list(chair['Date'])
 
@@ -442,18 +455,27 @@ def extract_features(segment_size):
             merge = df1.set_index('Time').join(df2.set_index('Time')).join(df3.set_index('Time'))
             merge.insert(loc=0, column='Date', value=date_idxs)
             merge.insert(loc=len(merge.columns), column='Label', value=label_idxs)
+            merge.fillna(0.0, inplace=True)
 
-            print(merge)
+            merge.reset_index(inplace=True)
+            titles = list(merge.columns)
+            titles[0], titles[1] = titles[1], titles[0]
+            merge = merge[titles]
+
+            '''
+            print(merge.columns)
+            print(merge.head())
             print()
-            print(len(merge))
-            print(len(date_idxs))
-            print(len(label_idxs))
+            #print(len(merge))
+            #print(len(date_idxs))
+            #print(len(label_idxs))
+            '''
 
             #Save to .csv file
-            #features_file = ''.join((c.split('/')[-1].split('.')[0],'.csv'))
-            #features_dir = get_features()
-            #features_file = os.path.join(features_dir,features_file)
-            #merge.to_csv(features_file, encoding='utf-8', index=False)
+            features_file = ''.join((c.split('/')[-1].split('.')[0],'.csv'))
+            features_dir = get_features()
+            features_file = os.path.join(features_dir,features_file)
+            merge.to_csv(features_file, encoding='utf-8', index=False)
 
             del df1,df2,df3,merge
 
@@ -498,7 +520,10 @@ def get_all_features():
     current_path = os.path.abspath(os.getcwd())
     os.chdir('..')
     current_path = (os.path.abspath(os.curdir))
-    f_path = os.path.join(current_path,'Data_1','Features')
+
+    f_path = os.path.join(current_path,'Data','Features','Segment_size_10')
+    #f_path = os.path.join(current_path,'Debug','Features')
+
     abs_path = absoluteFilePaths(f_path)
 
     list_of_dataframes = []
