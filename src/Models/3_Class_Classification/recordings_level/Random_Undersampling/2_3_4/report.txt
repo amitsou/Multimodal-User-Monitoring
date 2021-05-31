@@ -1,0 +1,51 @@
+Original dataset shape Counter({3: 26, 2: 22, 4: 21})
+Resampled dataset shape Counter({2: 21, 3: 21, 4: 21})
+Class2 : 21
+Class3 : 21
+Class4 : 21
+SVM Classification Report
+               precision    recall  f1-score   support
+
+      Class2       0.61      0.78      0.68        18
+      Class3       0.60      0.45      0.51        20
+      Class4       0.89      0.89      0.89        18
+
+    accuracy                           0.70        56
+   macro avg       0.70      0.71      0.70        56
+weighted avg       0.70      0.70      0.69        56
+ 
+
+DT Classification Report
+               precision    recall  f1-score   support
+
+      Class2       0.92      0.67      0.77        18
+      Class3       0.58      0.35      0.44        20
+      Class4       0.55      0.94      0.69        18
+
+    accuracy                           0.64        56
+   macro avg       0.68      0.65      0.64        56
+weighted avg       0.68      0.64      0.63        56
+ 
+
+NB Classification Report
+               precision    recall  f1-score   support
+
+      Class2       0.74      0.78      0.76        18
+      Class3       0.67      0.60      0.63        20
+      Class4       0.84      0.89      0.86        18
+
+    accuracy                           0.75        56
+   macro avg       0.75      0.76      0.75        56
+weighted avg       0.75      0.75      0.75        56
+ 
+
+KNN Classification Report
+               precision    recall  f1-score   support
+
+      Class2       0.60      0.67      0.63        18
+      Class3       0.80      0.40      0.53        20
+      Class4       0.62      0.89      0.73        18
+
+    accuracy                           0.64        56
+   macro avg       0.67      0.65      0.63        56
+weighted avg       0.68      0.64      0.63        56

@@ -1,0 +1,50 @@
+Class0 : 20
+Class2 : 22
+Class4 : 21
+SVM Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.55      0.32      0.41        34
+      Class2       0.41      0.50      0.45        18
+      Class4       0.57      0.89      0.70        18
+
+    accuracy                           0.51        70
+   macro avg       0.51      0.57      0.52        70
+weighted avg       0.52      0.51      0.49        70
+ 
+
+DT Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.57      0.35      0.44        34
+      Class2       0.27      0.22      0.24        18
+      Class4       0.47      0.89      0.62        18
+
+    accuracy                           0.46        70
+   macro avg       0.44      0.49      0.43        70
+weighted avg       0.47      0.46      0.43        70
+ 
+
+NB Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.65      0.32      0.43        34
+      Class2       0.48      0.67      0.56        18
+      Class4       0.57      0.89      0.70        18
+
+    accuracy                           0.56        70
+   macro avg       0.57      0.63      0.56        70
+weighted avg       0.58      0.56      0.53        70
+ 
+
+KNN Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.54      0.41      0.47        34
+      Class2       0.38      0.33      0.35        18
+      Class4       0.57      0.89      0.70        18
+
+    accuracy                           0.51        70
+   macro avg       0.49      0.54      0.51        70
+weighted avg       0.50      0.51      0.50        70
+

@@ -1,0 +1,61 @@
+Original dataset shape Counter({3: 26, 2: 22, 4: 21, 0: 20, 1: 19})
+Resampled dataset shape Counter({0: 19, 1: 19, 2: 19, 3: 19, 4: 19})
+Class0 : 19
+Class1 : 19
+Class2 : 19
+Class3 : 19
+Class4 : 19
+SVM Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.40      0.35      0.38        34
+      Class1       0.55      0.39      0.46        28
+      Class2       0.38      0.33      0.35        18
+      Class3       0.43      0.45      0.44        20
+      Class4       0.52      0.89      0.65        18
+
+    accuracy                           0.46       118
+   macro avg       0.45      0.48      0.46       118
+weighted avg       0.45      0.46      0.44       118
+ 
+
+DT Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.29      0.12      0.17        34
+      Class1       0.75      0.21      0.33        28
+      Class2       0.27      0.17      0.21        18
+      Class3       0.36      0.45      0.40        20
+      Class4       0.25      0.83      0.38        18
+
+    accuracy                           0.31       118
+   macro avg       0.38      0.36      0.30       118
+weighted avg       0.40      0.31      0.29       118
+ 
+
+NB Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.44      0.21      0.28        34
+      Class1       0.38      0.36      0.37        28
+      Class2       0.21      0.17      0.19        18
+      Class3       0.35      0.45      0.39        20
+      Class4       0.44      0.89      0.59        18
+
+    accuracy                           0.38       118
+   macro avg       0.37      0.41      0.36       118
+weighted avg       0.38      0.38      0.35       118
+ 
+
+KNN Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.38      0.41      0.39        34
+      Class1       0.42      0.39      0.41        28
+      Class2       0.25      0.11      0.15        18
+      Class3       0.36      0.25      0.29        20
+      Class4       0.48      0.89      0.63        18
+
+    accuracy                           0.41       118
+   macro avg       0.38      0.41      0.38       118
+weighted avg       0.38      0.41      0.38       118

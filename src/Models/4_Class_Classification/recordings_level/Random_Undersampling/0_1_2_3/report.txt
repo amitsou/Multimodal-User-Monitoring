@@ -1,0 +1,57 @@
+Original dataset shape Counter({3: 26, 2: 22, 0: 20, 1: 19})
+Resampled dataset shape Counter({0: 19, 1: 19, 2: 19, 3: 19})
+Class0 : 19
+Class1 : 19
+Class2 : 19
+Class3 : 19
+SVM Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.43      0.35      0.39        34
+      Class1       0.58      0.39      0.47        28
+      Class2       0.20      0.39      0.26        18
+      Class3       0.50      0.45      0.47        20
+
+    accuracy                           0.39       100
+   macro avg       0.43      0.40      0.40       100
+weighted avg       0.44      0.39      0.40       100
+ 
+
+DT Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.26      0.15      0.19        34
+      Class1       0.43      0.54      0.48        28
+      Class2       0.06      0.06      0.06        18
+      Class3       0.27      0.40      0.32        20
+
+    accuracy                           0.29       100
+   macro avg       0.26      0.28      0.26       100
+weighted avg       0.27      0.29      0.27       100
+ 
+
+NB Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.42      0.24      0.30        34
+      Class1       0.52      0.50      0.51        28
+      Class2       0.12      0.17      0.14        18
+      Class3       0.39      0.55      0.46        20
+
+    accuracy                           0.36       100
+   macro avg       0.36      0.36      0.35       100
+weighted avg       0.39      0.36      0.36       100
+ 
+
+KNN Classification Report
+               precision    recall  f1-score   support
+
+      Class0       0.33      0.38      0.35        34
+      Class1       0.41      0.50      0.45        28
+      Class2       0.24      0.22      0.23        18
+      Class3       0.33      0.15      0.21        20
+
+    accuracy                           0.34       100
+   macro avg       0.33      0.31      0.31       100
+weighted avg       0.33      0.34      0.33       100
+
